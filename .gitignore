@@ -1,0 +1,7 @@
+*.iml
+
+application.yml
+GADA_AuthKey_52G3C8TD7Z.p8
+
+.idea
+p8gada_api/

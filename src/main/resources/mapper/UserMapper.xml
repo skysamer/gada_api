@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.smartmobility.gada_api.mapper.UserMapper">
+    <select id="findByCellNum" parameterType="java.lang.String" resultType="com.smartmobility.gada_api.dto.user.UserDTO">
+        SELECT *
+        FROM gada.member
+        WHERE cell_num = #{cell}
+    </select>
+
+    <select id="existsByCellNum" parameterType="java.lang.String" resultType="boolean">
+        select EXISTS (select id from gada.member where cell_num = #{cell} limit 1) as success
+    </select>
+
+    <insert id="save" parameterType="com.smartmobility.gada_api.dto.user.UserDTO">
+        INSERT INTO gada.member(cell_num, passwd, nickname, required_terms_yn, optional_terms_yn, category, f_mobil, tool_type, role)
+        VALUES(
+            #{cell_num}, #{passwd}, #{nickname}, #{required_terms_yn}, #{optional_terms_yn},
+            #{category}, #{f_mobil}, #{tool_type}, #{role}
+        )
+    </insert>
+
+    <update id="updateNewPassword" parameterType="com.smartmobility.gada_api.dto.user.PasswordUpdateForm">
+        UPDATE gada.member
+        SET passwd = #{passwd}
+        WHERE cell_num = #{cell_num}
+    </update>
+
+    <update id="updateNewNickname" parameterType="com.smartmobility.gada_api.dto.user.MemberUpdateForm">
+        UPDATE gada.member
+        SET nickname = #{nickname}
+        WHERE cell_num = #{cell_num}
+    </update>
+    
+    <update id="updateMember" parameterType="com.smartmobility.gada_api.dto.user.MemberUpdateForm">
+        UPDATE gada.member
+        SET nickname = #{nickname}, f_mobil = #{f_mobil}, category = #{category}, tool_type = #{tool_type}, profile_img_url = #{profile_img_url}, favorite_station = #{favorite_station}  
+        WHERE cell_num = #{cell_num}
+    </update>
+    
+    <select id="existsNickname" parameterType="java.lang.String" resultType="boolean">
+		select exists(select * from gada.member WHERE nickname = #{nickname});
+    </select>
+    
+    <update id="deleteMember" parameterType="com.smartmobility.gada_api.dto.user.DeleteMember">
+		DELETE FROM gada.member 
+		WHERE cell_num = #{cell_num} AND nickname = #{nickname};
+    </update>
+    
+</mapper>

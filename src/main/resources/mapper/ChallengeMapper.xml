@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.smartmobility.gada_api.mapper.ChallengeMapper">
+    <select id="getEvent" resultType="com.smartmobility.gada_api.dto.challenge.ChallengeEventImage">
+        SELECT e.id, name, path, title, content, started_at, ended_at
+        FROM gada.challenge_event e
+        LEFT JOIN gada.challenge_event_image i
+        ON e.id = i.event_id
+    </select>
+
+    <select id="getEventImage" resultType="com.smartmobility.gada_api.dto.challenge.ChallengeEventImage">
+        SELECT *
+        FROM gada.challenge_event_image
+        WHERE event_id = #{id}
+    </select>
+
+    <select id="getStoreList" resultType="com.smartmobility.gada_api.dto.challenge.ChallengeStoreForm">
+        SELECT *
+        FROM gada.challenge_store
+    </select>
+
+    <select id="getStore" resultType="com.smartmobility.gada_api.dto.challenge.ChallengeStoreForm">
+        SELECT *
+        FROM gada.challenge_store
+        WHERE id = #{id}
+    </select>
+
+    <select id="getStoreImage" resultType="com.smartmobility.gada_api.dto.challenge.ChallengeStoreImage">
+        SELECT *
+        FROM gada.challenge_store_image
+        WHERE store_id = #{id}
+    </select>
+
+    <update id="plusLikes" parameterType="java.lang.Long">
+        UPDATE gada.challenge_store
+        SET likes = likes + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="minusLikes" parameterType="java.lang.Long">
+        UPDATE gada.challenge_store
+        SET likes = likes - 1
+        WHERE id = #{id}
+    </update>
+</mapper>

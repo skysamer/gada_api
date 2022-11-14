@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.smartmobility.gada_api.mapper.FootprintMapper">
+    <insert id="saveMultiple" parameterType="com.smartmobility.gada_api.dto.footprint.FootPrintMultiple">
+        INSERT INTO gada.footprint_multiple(number, count, question_name)
+        VALUES(
+            #{number}, #{count}, #{question_name}
+        )
+    </insert>
+
+    <insert id="saveSubjective" parameterType="com.smartmobility.gada_api.dto.footprint.FootprintSubjectiveForm">
+        INSERT INTO gada.footprint_subjective(answer, reason, question_name)
+        VALUES(
+            #{answer}, #{reason}, #{question_name}
+        )
+    </insert>
+
+    <update id="updateMultipleCount" parameterType="com.smartmobility.gada_api.dto.footprint.FootPrintMultiple">
+        UPDATE gada.footprint_multiple
+        SET count = #{count}
+        WHERE question_name = #{question_name} and number = #{number}
+    </update>
+
+    <select id="findByQuestionNameAndNumber" resultType="java.lang.Integer">
+        SELECT count
+        FROM gada.footprint_multiple
+        WHERE question_name = #{questionName} and number = #{number}
+    </select>
+
+    <select id="totalCountByQuestionName" resultType="java.lang.Double">
+        SELECT SUM(count)
+        FROM gada.footprint_multiple
+        GROUP BY question_name
+    </select>
+
+    <select id="getAnswerCount" resultType="com.smartmobility.gada_api.dto.footprint.AnswerCountForm">
+        SELECT number, count
+        FROM gada.footprint_multiple
+        WHERE question_name = #{questionName}
+    </select>
+</mapper>
