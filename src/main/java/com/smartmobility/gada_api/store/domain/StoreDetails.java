@@ -17,11 +17,11 @@ public class StoreDetails extends BaseTimeEntity {
     @ApiModelProperty(value = "시퀀스")
     private Long id;
 
-    @ApiModelProperty(value = "휠체어가 가능한지 (YES, NO, NONE)")
+    @ApiModelProperty(value = "휠체어가 가능한지 (1, 0, -1)")
     @Column(name = "is_wheelchair")
     private final int isWheelchair;
 
-    @ApiModelProperty(value = "유아차 동반가능여부 (YES, NO, NONE)")
+    @ApiModelProperty(value = "유아차 동반가능여부 (1, 0, -1)")
     @Column(name = "is_baby_car")
     private final int isBabyCar;
 
