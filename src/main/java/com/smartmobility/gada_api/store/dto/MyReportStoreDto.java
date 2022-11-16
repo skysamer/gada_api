@@ -11,31 +11,35 @@ import java.time.LocalDateTime;
 @ApiModel(value = "내가 제보한 가게정보 dto")
 public class MyReportStoreDto {
     @ApiModelProperty(value = "고유번호")
-    private Long id;
+    private final Long id;
 
     @ApiModelProperty(value = "이름")
-    private String name;
+    private final String name;
 
     @ApiModelProperty(value = "지번주소")
-    private String numberAddress;
+    private final String numberAddress;
 
     @ApiModelProperty(value = "도로명주소")
-    private String streetAddress;
+    private final String streetAddress;
 
     @ApiModelProperty(value = "업종명")
-    private String businessType;
+    private final String businessType;
 
     @ApiModelProperty(value = "위도")
-    private String lat;
+    private final String lat;
 
     @ApiModelProperty(value = "경도")
-    private String lon;
+    private final String lon;
 
     @ApiModelProperty(value = "제보날짜")
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
+
+    @ApiModelProperty(value = "봉사인증여부 (0, 1)")
+    private final int isCertificated;
 
     @QueryProjection
-    public MyReportStoreDto(Long id, String name, String numberAddress, String streetAddress, String businessType, String lat, String lon, LocalDateTime createdAt) {
+    public MyReportStoreDto(Long id, String name, String numberAddress, String streetAddress,
+                            String businessType, String lat, String lon, LocalDateTime createdAt, int isCertificated) {
         this.id = id;
         this.name = name;
         this.numberAddress = numberAddress;
@@ -44,5 +48,6 @@ public class MyReportStoreDto {
         this.lat = lat;
         this.lon = lon;
         this.createdAt = createdAt;
+        this.isCertificated = isCertificated;
     }
 }

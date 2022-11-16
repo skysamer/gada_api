@@ -25,14 +25,8 @@ public class StoreDetailsForm {
     @ApiModelProperty(value = "음성 안내, 점자 메뉴판이 있나요 (YES, NO, NONE)")
     private int isVoiceGuide;
 
-    @ApiModelProperty(value = "에스컬레이터가 있나요 (YES, NO, NONE)")
-    private int isEscalator;
-
     @ApiModelProperty(value = "주차 시설이 있나요 (YES, NO, NONE)")
     private int isParkingLot;
-
-    @ApiModelProperty(value = "와이파이가 있나요 (YES, NO, NONE)")
-    private int isWifi;
 
     @ApiModelProperty(value = "화장실이 있나요 (YES, NO, NONE)")
     private int isToilet;

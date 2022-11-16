@@ -13,8 +13,8 @@ public class QMyReportStoreDto extends ConstructorExpression<MyReportStoreDto> {
 
     private static final long serialVersionUID = -283585617L;
 
-    public QMyReportStoreDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<String> numberAddress, com.querydsl.core.types.Expression<String> streetAddress, com.querydsl.core.types.Expression<String> businessType, com.querydsl.core.types.Expression<String> lat, com.querydsl.core.types.Expression<String> lon, com.querydsl.core.types.Expression<java.time.LocalDateTime> createdAt) {
-        super(MyReportStoreDto.class, new Class<?>[]{long.class, String.class, String.class, String.class, String.class, String.class, String.class, java.time.LocalDateTime.class}, id, name, numberAddress, streetAddress, businessType, lat, lon, createdAt);
+    public QMyReportStoreDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<String> numberAddress, com.querydsl.core.types.Expression<String> streetAddress, com.querydsl.core.types.Expression<String> businessType, com.querydsl.core.types.Expression<String> lat, com.querydsl.core.types.Expression<String> lon, com.querydsl.core.types.Expression<java.time.LocalDateTime> createdAt, com.querydsl.core.types.Expression<Integer> isCertificated) {
+        super(MyReportStoreDto.class, new Class<?>[]{long.class, String.class, String.class, String.class, String.class, String.class, String.class, java.time.LocalDateTime.class, int.class}, id, name, numberAddress, streetAddress, businessType, lat, lon, createdAt, isCertificated);
     }
 
 }

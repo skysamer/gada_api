@@ -1,8 +1,10 @@
 package com.smartmobility.gada_api.store.controller;
 
+import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.store.dto.StoresDto;
 import com.smartmobility.gada_api.store.dto.TotalStoreInfoDto;
 import com.smartmobility.gada_api.store.service.StoreService;
+import com.smartmobility.gada_api.store.util.UserInfoExtractor;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService service;
+    private final UserInfoExtractor extractor;
     private final Log log = LogFactory.getLog(getClass());
 
     @ApiOperation(value = "자치단체 별 가게 리스트 정보")
@@ -55,8 +58,15 @@ public class StoreController {
             @ApiResponse(code = 200, message = "조회성공")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id){
-        TotalStoreInfoDto store = service.getStore(id);
+    public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id, @RequestHeader("X-AUTH-TOKEN") String token){
+        Member member;
+        try {
+            member = extractor.extract(token);
+        }catch (Exception e){
+            TotalStoreInfoDto store = service.getStore(id, new Member(-1L));
+            return new ResponseEntity<>(store, HttpStatus.OK);
+        }
+        TotalStoreInfoDto store = service.getStore(id, member);
         return new ResponseEntity<>(store, HttpStatus.OK);
     }
 }

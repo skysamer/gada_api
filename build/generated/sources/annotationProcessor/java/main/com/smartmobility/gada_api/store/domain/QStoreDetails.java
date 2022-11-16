@@ -33,11 +33,11 @@ public class QStoreDetails extends EntityPathBase<StoreDetails> {
 
     public final NumberPath<Integer> isBabyCar = createNumber("isBabyCar", Integer.class);
 
+    public final NumberPath<Integer> isCertificated = createNumber("isCertificated", Integer.class);
+
     public final NumberPath<Integer> isChildOk = createNumber("isChildOk", Integer.class);
 
     public final NumberPath<Integer> isDisabledToilet = createNumber("isDisabledToilet", Integer.class);
-
-    public final NumberPath<Integer> isEscalator = createNumber("isEscalator", Integer.class);
 
     public final NumberPath<Integer> isParkingLot = createNumber("isParkingLot", Integer.class);
 
@@ -46,8 +46,6 @@ public class QStoreDetails extends EntityPathBase<StoreDetails> {
     public final NumberPath<Integer> isVoiceGuide = createNumber("isVoiceGuide", Integer.class);
 
     public final NumberPath<Integer> isWheelchair = createNumber("isWheelchair", Integer.class);
-
-    public final NumberPath<Integer> isWifi = createNumber("isWifi", Integer.class);
 
     public final com.smartmobility.gada_api.member.domain.QMember member;
 

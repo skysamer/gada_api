@@ -11,7 +11,6 @@ import java.util.List;
 import static com.smartmobility.gada_api.store.domain.QStore.store;
 import static com.smartmobility.gada_api.store.domain.QStoreDetails.storeDetails;
 import static com.smartmobility.gada_api.store.domain.QStoreReview.storeReview;
-import static com.smartmobility.gada_api.member.domain.QMember.member;
 
 @Repository
 @Transactional(readOnly = true)
@@ -49,8 +48,7 @@ public class StoreQueryRepository {
                         store.streetAddress, store.phone, store.businessType, store.lat, store.lon,
                         storeDetails.isWheelchair.sum().as("isWheelchair"), storeDetails.isBabyCar.sum().as("isBabyCar"),
                         storeDetails.isDisabledToilet.sum().as("isDisabledToilet"), storeDetails.isChildOk.sum().as("isChildOk"),
-                        storeDetails.isVoiceGuide.sum().as("isVoiceGuide"), storeDetails.isEscalator.sum().as("isEscalator"),
-                        storeDetails.isParkingLot.sum().as("isParkingLot"), storeDetails.isWifi.sum().as("isWifi"),
+                        storeDetails.isVoiceGuide.sum().as("isVoiceGuide"), storeDetails.isParkingLot.sum().as("isParkingLot"),
                         storeDetails.isToilet.sum().as("isToilet")))
                 .from(store)
                 .leftJoin(storeDetails).on(store.eq(storeDetails.store))

@@ -49,24 +49,21 @@ public class TotalStoreInfoDto {
     @ApiModelProperty(value = "음성 안내, 점자 메뉴판이 있나요 (1 이상일 경우 존재)")
     private final int isVoiceGuide;
 
-    @ApiModelProperty(value = "에스컬레이터가 있나요 (1 이상일 경우 존재)")
-    private final int isEscalator;
-
     @ApiModelProperty(value = "주차 시설이 있나요 (1 이상일 경우 존재)")
     private final int isParkingLot;
 
-    @ApiModelProperty(value = "와이파이가 있나요 (1 이상일 경우 존재)")
-    private final int isWifi;
-
     @ApiModelProperty(value = "화장실이 있나요 (1 이상일 경우 존재)")
     private final int isToilet;
+
+    @ApiModelProperty(value = "즐겨찾기 등록여부")
+    private boolean isMyFavorites;
 
     @ApiModelProperty(value = "리뷰개수")
     private long reviewCount;
 
     @QueryProjection
     public TotalStoreInfoDto(Long id, String controlNumber, String name, String numberAddress, String streetAddress, String phone, String businessType, String lat, String lon,
-                             int isWheelchair, int isBabyCar, int isDisabledToilet, int isChildOk, int isVoiceGuide, int isEscalator, int isParkingLot, int isWifi, int isToilet) {
+                             int isWheelchair, int isBabyCar, int isDisabledToilet, int isChildOk, int isVoiceGuide, int isParkingLot, int isToilet) {
         this.id = id;
         this.controlNumber = controlNumber;
         this.name = name;
@@ -81,13 +78,15 @@ public class TotalStoreInfoDto {
         this.isDisabledToilet = isDisabledToilet;
         this.isChildOk = isChildOk;
         this.isVoiceGuide = isVoiceGuide;
-        this.isEscalator = isEscalator;
         this.isParkingLot = isParkingLot;
-        this.isWifi = isWifi;
         this.isToilet = isToilet;
     }
 
     public void countReview(long count){
         this.reviewCount = count;
+    }
+
+    public void checkFavorites(boolean isExists){
+        this.isMyFavorites = isExists;
     }
 }

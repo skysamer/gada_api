@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Getter @Entity
 @ApiModel(value = "직원 정보 엔티티")
-@Table(name = "members")
+@Table(name = "members") @NoArgsConstructor
 public class Member implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "유저번호")
@@ -49,6 +49,10 @@ public class Member implements UserDetails {
     @ApiModelProperty(value = "유저 세부정보")
     @Embedded
     private MemberDetails details;
+
+    public Member(Long id){
+        this.id = id;
+    }
 
     public void setSocialProvider(Provider provider){
         this.provider = provider;

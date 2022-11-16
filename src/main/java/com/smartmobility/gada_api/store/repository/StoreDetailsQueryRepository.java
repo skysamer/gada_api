@@ -24,7 +24,7 @@ public class StoreDetailsQueryRepository {
     public List<MyReportStoreDto> getMyStores(Member member, Pageable pageable){
         return jpaQueryFactory
                 .select(new QMyReportStoreDto(store.id, store.name, store.numberAddress, store.streetAddress,
-                        store.businessType, store.lat, store.lon, storeDetails.createdAt))
+                        store.businessType, store.lat, store.lon, storeDetails.createdAt, storeDetails.isCertificated))
                 .from(storeDetails)
                 .join(store).on(store.eq(storeDetails.store))
                 .where(storeDetails.member.eq(member)
@@ -40,13 +40,11 @@ public class StoreDetailsQueryRepository {
                 .limit(pageable.getPageSize())
                 .groupBy(store.id)
                 .fetch();
-
     }
 
     public long getMyStoreCount(Member member){
         return jpaQueryFactory
-                .select(new QMyReportStoreDto(store.id, store.name, store.numberAddress, store.streetAddress,
-                        store.businessType, store.lat, store.lon, storeDetails.createdAt))
+                .select(storeDetails)
                 .from(storeDetails)
                 .join(store).on(store.eq(storeDetails.store))
                 .where(storeDetails.member.eq(member)

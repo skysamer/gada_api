@@ -40,23 +40,25 @@ public class StoreDetailsService {
         if(store == null){
             return new HttpBodyMessage("fail", "가게정보없음");
         }
-
         StoreDetails storeDetails = new StoreDetails(detailsForm, store, member);
-        detailsRepository.save(storeDetails);
+
         try{
             uploadImage(images, storeDetails);
         }catch (Exception e){
             log.error(e);
             throw new RuntimeException();
         }
+        detailsRepository.save(storeDetails);
         return new HttpBodyMessage("success", "제보하기 성공");
     }
 
     private void uploadImage(List<MultipartFile> images, StoreDetails details) throws IOException {
-        if(images == null){
+        if (images == null || images.size() == 0) {
+            details.checkCertificate(0);
             return;
         }
 
+        details.checkCertificate(1);
         for(MultipartFile image : images){
             String imageUrl = s3Upload.upload(image);
             StoreDetailsImage imageEntity = new StoreDetailsImage(imageUrl, details);
