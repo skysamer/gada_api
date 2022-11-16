@@ -20,7 +20,7 @@ permissions:
 jobs:
   build:
     name: Deploy
-    runs-on: ec2-user
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
