@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  build:
     name: Deploy
     runs-on: ec2-user
     environment: production
