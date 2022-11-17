@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.smartmobility.gada_api.UtilTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-11T06:37:10" hostname="isangmin-ui-MacBookPro.local" time="0.007">
-  <properties/>
-  <testcase name="test()" classname="com.smartmobility.gada_api.UtilTest" time="0.007"/>
-  <system-out><![CDATA[acfecb4b-4b73-4db8-9c88-f265430cafa8-KakaoTalk_Photo_2022-10-14-17-10-13.jpeg
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
