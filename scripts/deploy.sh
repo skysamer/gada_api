@@ -29,4 +29,5 @@ echo "> JAR Name: $JAR_NAME"
 
 chmod 777 /home/ec2-user/action/$JAR_NAME
 
-nohup java -jar -Dspring.config.location=/home/ec2-user/action/application.yml $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar -Dspring.config.location=/home/ec2-user/action/application.yml \
+$JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
