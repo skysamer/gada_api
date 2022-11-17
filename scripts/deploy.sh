@@ -1,25 +1,11 @@
 #!/bin/bash
 
-REPOSITORY=/home/ec2-user/app
+REPOSITORY=/home/ec2-user/action
 PROJECT_NAME=gada_api
-
-cd $REPOSITORY/$PROJECT_NAME/
-
-echo "> Git pull"
-
-git pull
-
-echo "> 프로젝트 Build 시작"
-
-./gradlew build -x test
-
-echo "> 디렉토리 이동"
-
-cd $REPOSITORY
 
 echo "> build 파일 복사"
 
-cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
+cp $REPOSITORY/zip/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 PID 확인"
 

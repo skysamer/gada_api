@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source:  /
-    destination: /home/ec2-user/action
+    destination: /home/ec2-user/action/zip
     overwrite: yes
 
 permissions:
@@ -14,6 +14,6 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: deploy.sh
+    - location: ./scripts/deploy.sh
       timeout: 60
       runas: ec2-user
