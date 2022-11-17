@@ -5,7 +5,7 @@ PROJECT_NAME=gada_api
 
 echo "> build 파일 복사"
 
-cp $REPOSITORY/zip/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
+cp $REPOSITORY/zip/build/libs/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 PID 확인"
 
