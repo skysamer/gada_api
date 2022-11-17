@@ -23,11 +23,12 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
-JAR_NAME=$(ls -tr $REPOSITORY/ | grep jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
 
 echo "> JAR Name: $JAR_NAME"
 
 chmod 777 /home/ec2-user/action/$JAR_NAME
 
-nohup java -jar -Dspring.config.location=/home/ec2-user/action/application.yml \
+nohup java -jar \
+-Dspring.config.location=/home/ec2-user/action/application.yml \
 $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
