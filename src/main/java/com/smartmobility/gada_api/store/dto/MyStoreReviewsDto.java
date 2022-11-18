@@ -30,17 +30,21 @@ public class MyStoreReviewsDto {
     @ApiModelProperty(value = "가게 시퀀스")
     private final Long storeId;
 
+    @ApiModelProperty(value = "가게이름")
+    private final String storeName;
+
     @ApiModelProperty(value = "리뷰 이미지 리스트")
     private final List<StoreReviewImageDto> imageUrls = new ArrayList<>();
 
     @QueryProjection
-    public MyStoreReviewsDto(Long id, String nickname, String tag,
-                             String reviews, LocalDateTime createdAt, Long storeId) {
+    public MyStoreReviewsDto(Long id, String nickname, String tag, String reviews, LocalDateTime createdAt,
+                             Long storeId, String storeName) {
         this.id = id;
         this.nickname = nickname;
         this.tag = tag;
         this.reviews = reviews;
         this.createdAt = createdAt;
         this.storeId = storeId;
+        this.storeName = storeName;
     }
 }

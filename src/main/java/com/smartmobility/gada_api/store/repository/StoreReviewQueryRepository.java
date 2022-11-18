@@ -57,7 +57,7 @@ public class StoreReviewQueryRepository {
     public List<MyStoreReviewsDto> getMyReviews(Member member, Pageable pageable){
         return jpaQueryFactory
                 .select(new QMyStoreReviewsDto(storeReview.id, QMember.member.nickname, storeReview.tag,
-                        storeReview.reviews, storeReview.createdAt, store.id.as("storeId")))
+                        storeReview.reviews, storeReview.createdAt, store.id.as("storeId"), store.name.as("storeName")))
                 .from(storeReview)
                 .join(store).on(storeReview.store.eq(store))
                 .join(QMember.member).on(storeReview.member.eq(QMember.member))
@@ -70,7 +70,7 @@ public class StoreReviewQueryRepository {
     public long getMyReviewCount(Member member){
         return jpaQueryFactory
                 .select(new QMyStoreReviewsDto(storeReview.id, QMember.member.nickname, storeReview.tag,
-                        storeReview.reviews, storeReview.createdAt, store.id.as("storeId")))
+                        storeReview.reviews, storeReview.createdAt, store.id.as("storeId"), store.name.as("storeName")))
                 .from(storeReview)
                 .join(store).on(storeReview.store.eq(store))
                 .join(QMember.member).on(storeReview.member.eq(QMember.member))

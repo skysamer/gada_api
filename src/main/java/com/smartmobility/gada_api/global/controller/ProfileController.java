@@ -15,6 +15,7 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profile(){
+        System.out.println(env.getActiveProfiles().length);
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
         List<String> realProfiles = Arrays.asList("real", "real1", "real2");
 
