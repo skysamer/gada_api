@@ -25,7 +25,7 @@ nohup java -jar \
 -Dspring.config.location=/home/ec2-user/action/application-real8400.yml \
 $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
-sleep 60
+sleep 40
 
 echo "> 리버스 프록시 작업" >> debug.log
 
