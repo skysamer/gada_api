@@ -32,14 +32,15 @@ echo "set \$service_url http://127.0.0.1:8400;" | sudo tee /etc/nginx/conf.d/ser
 result_value=$(netstat -nap 2>/dev/null | grep 8600 | awk '{print $7}')
 number_value=${#result_value}
 
-pid_val=${result_value%%'/'*}
-
-kill -9 $pid_val
-
-#if [ -z "$CURRENT_PID" ]; then
-#	echo "> 현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다."
-#else
-#	echo "> kill -15 $CURRENT_PID"
-#	kill -15 $CURRENT_PID
-#	sleep 5
-#fi
+if [ $number_value == 0 ]; then
+     echo '해당포트가 미사용중으로 이미 종료되었습니다..'
+else
+     echo '종료를 시작합니다.'
+     pid_val = ${result_value%%'/'*}
+     kill -9 $pid_val
+     if [ $? == 0 ]; then
+    echo '정상종료'
+     else
+        echo '종료 실패'
+    fi
+fi
