@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     @GetMapping("/")
     public String home(){
-        return "hello gada 0.1.5";
+        return "hello gada 0.1.6";
     }
 }
