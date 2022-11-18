@@ -22,12 +22,14 @@ echo "> JAR Name: $JAR_NAME"
 chmod 777 /home/ec2-user/action/$JAR_NAME
 
 nohup java -jar \
--Dspring.config.location=/home/ec2-user/action/application-real8400.yml \
+-Dspring.config.location=/home/ec2-user/action/application-real8600.yml \
 $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
-echo "set \$service_url http://127.0.0.1:8400;" | sudo tee /etc/nginx/conf.d/service-url.inc
+sleep 30
 
-result_value=$(netstat -nap 2>/dev/null | grep 8600 | awk '{print $7}')
+echo "set \$service_url http://127.0.0.1:8600;" | sudo tee /etc/nginx/conf.d/service-url.inc
+
+result_value=$(netstat -nap 2>/dev/null | grep 8400 | awk '{print $7}')
 number_value=${#result_value}
 
 pid_val=${result_value%%'/'*}
