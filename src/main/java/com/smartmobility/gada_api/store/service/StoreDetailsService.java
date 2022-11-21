@@ -42,6 +42,9 @@ public class StoreDetailsService {
         }
         StoreDetails storeDetails = new StoreDetails(detailsForm, store, member);
 
+        boolean isAlreadyCertificated = detailsRepository.existsByStoreAndMemberAndIsCertificated(store, member, 1);
+        int isCertificated = checkCertificated(images, detailsForm.getIsAround(), isAlreadyCertificated);
+        storeDetails.checkCertificate(isCertificated);
         try{
             uploadImage(images, storeDetails);
         }catch (Exception e){
@@ -53,17 +56,18 @@ public class StoreDetailsService {
     }
 
     private void uploadImage(List<MultipartFile> images, StoreDetails details) throws IOException {
-        if (images == null || images.size() == 0) {
-            details.checkCertificate(0);
-            return;
-        }
-
-        details.checkCertificate(1);
         for(MultipartFile image : images){
             String imageUrl = s3Upload.upload(image);
             StoreDetailsImage imageEntity = new StoreDetailsImage(imageUrl, details);
             detailsImageRepository.save(imageEntity);
         }
+    }
+
+    private int checkCertificated(List<MultipartFile> images, boolean isAround, boolean isAlreadyCertificated){
+        if (images == null || images.size() == 0 || !isAround || isAlreadyCertificated) {
+            return 0;
+        }
+        return 1;
     }
 
     public PageResult<MyReportStoreDto> getMyStores(Member member, Pageable pageable){

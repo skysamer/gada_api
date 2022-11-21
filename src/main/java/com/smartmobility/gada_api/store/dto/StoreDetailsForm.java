@@ -3,8 +3,9 @@ package com.smartmobility.gada_api.store.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.ToString;
 
-@Getter
+@Getter @ToString
 @ApiModel(value = "가게 제보정보 입력 폼")
 public class StoreDetailsForm {
     @ApiModelProperty(value = "가게고유번호")
@@ -30,6 +31,9 @@ public class StoreDetailsForm {
 
     @ApiModelProperty(value = "화장실이 있나요 (YES, NO, NONE)")
     private int isToilet;
+
+    @ApiModelProperty(value = "근처 인증인지 여부")
+    private Boolean isAround;
 
     @ApiModelProperty(value = "방문을 환영하는 사람")
     private String recommendedPerson;
