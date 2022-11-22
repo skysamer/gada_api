@@ -56,6 +56,10 @@ public class StoreDetailsService {
     }
 
     private void uploadImage(List<MultipartFile> images, StoreDetails details) throws IOException {
+        if (images == null || images.size() == 0) {
+            return;
+        }
+
         for(MultipartFile image : images){
             String imageUrl = s3Upload.upload(image);
             StoreDetailsImage imageEntity = new StoreDetailsImage(imageUrl, details);

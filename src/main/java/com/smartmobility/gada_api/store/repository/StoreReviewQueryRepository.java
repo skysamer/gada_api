@@ -26,7 +26,9 @@ public class StoreReviewQueryRepository {
         return jpaQueryFactory
                 .select(storeReview.count())
                 .from(storeReview)
-                .where(storeReview.store.id.eq(storeId))
+                .join(store).on(storeReview.store.eq(store))
+                .join(member).on(storeReview.member.eq(member))
+                .where(store.id.eq(storeId))
                 .fetchFirst();
     }
 

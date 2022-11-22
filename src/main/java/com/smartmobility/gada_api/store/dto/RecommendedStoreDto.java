@@ -5,33 +5,17 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
-import javax.persistence.Column;
-
 @Getter
-@ApiModel(value = "내가 즐겨찾기한 가게 정보 dto")
-public class MyFavoritesStoreDto {
+@ApiModel(value = "가다 추천 함께가게 dto")
+public class RecommendedStoreDto {
     @ApiModelProperty(value = "가게고유번호")
     private final Long storeId;
 
     @ApiModelProperty(value = "이름")
     private final String name;
 
-    @ApiModelProperty(value = "지번주소")
-    @Column(name = "number_address")
-    private final String numberAddress;
-
-    @ApiModelProperty(value = "도로명주소")
-    @Column(name = "street_address")
-    private final String streetAddress;
-
     @ApiModelProperty(value = "업종명")
     private final String businessType;
-
-    @ApiModelProperty(value = "위도")
-    private final String lat;
-
-    @ApiModelProperty(value = "경도")
-    private final String lon;
 
     @ApiModelProperty(value = "휠체어가 가능한지 (1, 0, -1)")
     private final int isWheelchair;
@@ -54,16 +38,18 @@ public class MyFavoritesStoreDto {
     @ApiModelProperty(value = "화장실이 있나요 (1, 0, -1)")
     private final int isToilet;
 
+    @ApiModelProperty(value = "이미지 url")
+    private final String imageUrl;
+
+    @ApiModelProperty(value = "즐겨찾기 추가 여부")
+    private boolean isFavorites;
+
     @QueryProjection
-    public MyFavoritesStoreDto(Long storeId, String name, String numberAddress, String streetAddress, String businessType, String lat, String lon,
-                               int isWheelchair, int isBabyCar, int isDisabledToilet, int isChildOk, int isVoiceGuide, int isParkingLot, int isToilet) {
+    public RecommendedStoreDto(Long storeId, String name, String businessType, int isWheelchair, int isBabyCar,
+                               int isDisabledToilet, int isChildOk, int isVoiceGuide, int isParkingLot, int isToilet, String imageUrl) {
         this.storeId = storeId;
         this.name = name;
-        this.numberAddress = numberAddress;
-        this.streetAddress = streetAddress;
         this.businessType = businessType;
-        this.lat = lat;
-        this.lon = lon;
         this.isWheelchair = isWheelchair;
         this.isBabyCar = isBabyCar;
         this.isDisabledToilet = isDisabledToilet;
@@ -71,5 +57,10 @@ public class MyFavoritesStoreDto {
         this.isVoiceGuide = isVoiceGuide;
         this.isParkingLot = isParkingLot;
         this.isToilet = isToilet;
+        this.imageUrl = imageUrl;
+    }
+
+    public void checkIsMyFavorites(boolean isFavorites){
+        this.isFavorites = isFavorites;
     }
 }
