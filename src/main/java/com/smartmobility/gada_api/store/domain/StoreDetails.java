@@ -5,6 +5,8 @@ import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.store.dto.StoreDetailsForm;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import javax.persistence.*;
 @Entity @Getter @NoArgsConstructor
 @Table(name = "store_details")
 @ApiModel(value = "함께 가게 공유정보 엔티티")
+@AllArgsConstructor @Builder
 public class StoreDetails extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "시퀀스")

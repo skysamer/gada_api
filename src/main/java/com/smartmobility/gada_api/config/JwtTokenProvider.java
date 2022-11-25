@@ -56,8 +56,8 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createLongTermTokenLogin(String email, String role) {
-        Claims claims = Jwts.claims().setSubject(email);
+    public String createLongTermTokenLogin(String sub, String role) {
+        Claims claims = Jwts.claims().setSubject(sub);
         claims.put("role", role);
         Date now = new Date();
 

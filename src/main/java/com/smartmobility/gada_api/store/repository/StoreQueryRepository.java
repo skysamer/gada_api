@@ -27,11 +27,9 @@ public class StoreQueryRepository {
                 .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
                         store.numberAddress, store.streetAddress, store.phone, store.businessType,
                         store.lat, store.lon))
-                .from(store)
-                .leftJoin(storeDetails).on(storeDetails.store.eq(store))
-                .where(store.numberAddress.contains(region)
-                        .and(storeDetails.id.isNotNull())
-                )
+                .from(storeDetails)
+                .join(store).on(storeDetails.store.eq(store))
+                .where(store.numberAddress.contains(region))
                 .groupBy(store.id)
                 .having(Expressions.asBoolean(true).isTrue()
                         .and(checkWheelchair(keywords))
@@ -77,6 +75,22 @@ public class StoreQueryRepository {
                 .fetchFirst();
     }
 
+    public List<RecommendedStoreDto> getReportedStoreWithImage(){
+        return jpaQueryFactory
+                .select(new QRecommendedStoreDto(store.id.as("storeId"), store.name, store.businessType,
+                        storeDetails.isWheelchair.sum().as("isWheelchair"), storeDetails.isBabyCar.sum().as("isBabyCar"),
+                        storeDetails.isDisabledToilet.sum().as("isDisabledToilet"), storeDetails.isChildOk.sum().as("isChildOk"),
+                        storeDetails.isVoiceGuide.sum().as("isVoiceGuide"), storeDetails.isParkingLot.sum().as("isParkingLot"),
+                        storeDetails.isToilet.sum().as("isToilet"), storeDetailsImage.imageUrl))
+                .from(store)
+                .join(storeDetails).on(storeDetails.store.eq(store))
+                .leftJoin(storeDetailsImage).on(storeDetailsImage.storeDetails.eq(storeDetails))
+                .groupBy(store)
+                .having(storeDetailsImage.imageUrl.isNotNull())
+                .orderBy(storeDetails.createdAt.desc())
+                .fetch();
+    }
+
     public List<RecommendedStoreDto> getReportedStore(){
         return jpaQueryFactory
                 .select(new QRecommendedStoreDto(store.id.as("storeId"), store.name, store.businessType,
@@ -87,10 +101,21 @@ public class StoreQueryRepository {
                 .from(store)
                 .join(storeDetails).on(storeDetails.store.eq(store))
                 .leftJoin(storeDetailsImage).on(storeDetailsImage.storeDetails.eq(storeDetails))
-                .where(storeDetails.isCertificated.eq(1))
                 .groupBy(store)
+                .orderBy(storeDetails.createdAt.desc())
                 .fetch();
     }
+
+//    public List<Long> getStoresWithImage(){
+//        return jpaQueryFactory
+//                .select(store.id)
+//                .from(store)
+//                .join(storeDetails).on(storeDetails.store.eq(store))
+//                .leftJoin(storeDetailsImage).on(storeDetailsImage.storeDetails.eq(storeDetails))
+//                .groupBy(store)
+//                .having(storeDetailsImage.imageUrl.count().goe(1))
+//                .fetch();
+//    }
 
     public List<RecommendedStoreDto> getRecommendedStore(){
         return jpaQueryFactory
