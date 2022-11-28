@@ -1,7 +1,9 @@
 package com.smartmobility.gada_api.store.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.smartmobility.gada_api.store.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +25,21 @@ public class StoreQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<StoresDto> getStores(String region, List<String> keywords){
+        BooleanBuilder builder = new BooleanBuilder();
+        NumberTemplate booleanTemplateNumber = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", store.numberAddress, region);
+        NumberTemplate booleanTemplateStreet = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", store.streetAddress, region);
+        builder.and(booleanTemplateNumber.gt(0));
+        builder.and(booleanTemplateStreet.gt(0));
+
         return jpaQueryFactory
                 .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
                         store.numberAddress, store.streetAddress, store.phone, store.businessType,
                         store.lat, store.lon))
                 .from(storeDetails)
                 .join(store).on(storeDetails.store.eq(store))
-                .where(store.numberAddress.contains(region))
+                .where(builder)
                 .groupBy(store.id)
                 .having(Expressions.asBoolean(true).isTrue()
                         .and(checkWheelchair(keywords))
