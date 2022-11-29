@@ -31,7 +31,7 @@ public class StoreQueryRepository {
         NumberTemplate booleanTemplateStreet = Expressions.numberTemplate(Double.class,
                 "function('match',{0},{1})", store.streetAddress, region);
         builder.and(booleanTemplateNumber.gt(0));
-        builder.and(booleanTemplateStreet.gt(0));
+        builder.or(booleanTemplateStreet.gt(0));
 
         return jpaQueryFactory
                 .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
