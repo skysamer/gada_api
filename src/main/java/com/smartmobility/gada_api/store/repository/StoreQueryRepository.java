@@ -25,21 +25,13 @@ public class StoreQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<StoresDto> getStores(String region, List<String> keywords){
-        BooleanBuilder builder = new BooleanBuilder();
-        NumberTemplate booleanTemplateNumber = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", store.numberAddress, region);
-        NumberTemplate booleanTemplateStreet = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", store.streetAddress, region);
-        builder.and(booleanTemplateNumber.gt(0));
-        builder.or(booleanTemplateStreet.gt(0));
-
         return jpaQueryFactory
                 .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
                         store.numberAddress, store.streetAddress, store.phone, store.businessType,
                         store.lat, store.lon))
                 .from(storeDetails)
                 .join(store).on(storeDetails.store.eq(store))
-                .where(builder)
+                .where(regionEq(region))
                 .groupBy(store.id)
                 .having(Expressions.asBoolean(true).isTrue()
                         .and(checkWheelchair(keywords))
@@ -116,17 +108,6 @@ public class StoreQueryRepository {
                 .fetch();
     }
 
-//    public List<Long> getStoresWithImage(){
-//        return jpaQueryFactory
-//                .select(store.id)
-//                .from(store)
-//                .join(storeDetails).on(storeDetails.store.eq(store))
-//                .leftJoin(storeDetailsImage).on(storeDetailsImage.storeDetails.eq(storeDetails))
-//                .groupBy(store)
-//                .having(storeDetailsImage.imageUrl.count().goe(1))
-//                .fetch();
-//    }
-
     public List<RecommendedStoreDto> getRecommendedStore(){
         return jpaQueryFactory
                 .select(new QRecommendedStoreDto(recommendedStore.storeId, recommendedStore.name, recommendedStore.businessType,
@@ -135,6 +116,18 @@ public class StoreQueryRepository {
                         recommendedStore.isToilet, recommendedStore.imageUrl))
                 .from(recommendedStore)
                 .fetch();
+    }
+
+    private BooleanBuilder regionEq(String region){
+        BooleanBuilder builder = new BooleanBuilder();
+        NumberTemplate booleanTemplateNumber = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", store.numberAddress, region);
+        NumberTemplate booleanTemplateStreet = Expressions.numberTemplate(Double.class,
+                "function('match',{0},{1})", store.streetAddress, region);
+        builder.and(booleanTemplateNumber.gt(0));
+        builder.or(booleanTemplateStreet.gt(0));
+
+        return region.equals("all") ? null : builder;
     }
 
     private BooleanExpression checkWheelchair(List<String> keywords){

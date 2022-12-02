@@ -27,7 +27,7 @@ public class StoreController {
 
     @ApiOperation(value = "자치단체 별 가게 리스트 정보")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "region", value = "행정구 명 (송파구, 마포구 등)"),
+            @ApiImplicitParam(name = "region", value = "행정구 명 (송파구, 마포구 등 전체는 'all')"),
             @ApiImplicitParam(name = "keywords", value = "wheelchair, disabledToilet, babyCar, voiceGuide, childOk, parkingLot, toilet " +
                     "(해당항목을 리스트에 넣어 요청, 필터링 조건이 없을 경우 'none' 값을 넣어 요청)")
     })

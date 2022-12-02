@@ -28,7 +28,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # (2) JDK 11 세팅
+    # (2) JDK 1.8 세팅
     - name: Set up JDK 1.8
       uses: actions/setup-java@v3
       with:
