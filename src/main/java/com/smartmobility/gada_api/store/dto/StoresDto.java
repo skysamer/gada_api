@@ -14,9 +14,6 @@ public class StoresDto {
     @ApiModelProperty(value = "자치단체구분코드")
     private final String localCode;
 
-    @ApiModelProperty(value = "제어코드")
-    private final String controlNumber;
-
     @ApiModelProperty(value = "이름")
     private final String name;
 
@@ -39,11 +36,10 @@ public class StoresDto {
     private final String lon;
 
     @QueryProjection
-    public StoresDto(Long id, String localCode, String controlNumber, String name, String numberAddress,
-                     String streetAddress, String phone, String businessType, String lat, String lon) {
+    public StoresDto(Long id, String localCode, String name, String numberAddress, String streetAddress,
+                     String phone, String businessType, String lat, String lon) {
         this.id = id;
         this.localCode = localCode;
-        this.controlNumber = controlNumber;
         this.name = name;
         this.numberAddress = numberAddress;
         this.streetAddress = streetAddress;

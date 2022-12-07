@@ -44,6 +44,7 @@ public class StoreService {
         if(member.getId().equals(-1L)){
             return storeQueryRepository.getRecommendedStore();
         }
+
         List<RecommendedStoreDto> recommendedStores = storeQueryRepository.getRecommendedStore();
         for(RecommendedStoreDto recommendedStore : recommendedStores){
             boolean isFavoritesExists = favoritesQueryRepository.isMyFavoritesExists(recommendedStore.getStoreId(), member);

@@ -35,7 +35,7 @@ public class StoreReviewService {
     private final ModelMapper modelMapper;
     private final Log log = LogFactory.getLog(getClass());
 
-    public HttpBodyMessage review(StoreReviewForm reviewForm, List<MultipartFile> images, Member member) {
+    public HttpBodyMessage post(StoreReviewForm reviewForm, List<MultipartFile> images, Member member) {
         Store store = storeRepository.findById(reviewForm.getStoreId()).orElse(null);
         if (store == null) {
             return new HttpBodyMessage("fail", "가게정보없음");
@@ -72,6 +72,7 @@ public class StoreReviewService {
                     .filter(image -> image.getReviewId().equals(review.getId()))
                     .collect(Collectors.toList()));
         });
+
         long count = reviewQueryRepository.getReviewCount(storeId);
         return new PageResult<>(reviews, count);
     }
@@ -79,8 +80,10 @@ public class StoreReviewService {
     public void remove(Long id){
         StoreReview review = reviewRepository.findById(id).orElse(null);
         if(review == null){
+            log.error("remove error");
             throw new RuntimeException();
         }
+
         List<StoreReviewImage> reviewImages = reviewImageRepository.findAllByStoreReview(review);
         removeImage(reviewImages);
         reviewImageRepository.deleteAll(reviewImages);

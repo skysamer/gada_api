@@ -10,9 +10,6 @@ public class TotalStoreInfoDto {
     @ApiModelProperty(value = "가게 고유번호")
     private final Long id;
 
-    @ApiModelProperty(value = "제어코드")
-    private final String controlNumber;
-
     @ApiModelProperty(value = "이름")
     private final String name;
 
@@ -62,10 +59,9 @@ public class TotalStoreInfoDto {
     private long reviewCount;
 
     @QueryProjection
-    public TotalStoreInfoDto(Long id, String controlNumber, String name, String numberAddress, String streetAddress, String phone, String businessType, String lat, String lon,
+    public TotalStoreInfoDto(Long id, String name, String numberAddress, String streetAddress, String phone, String businessType, String lat, String lon,
                              int isWheelchair, int isBabyCar, int isDisabledToilet, int isChildOk, int isVoiceGuide, int isParkingLot, int isToilet) {
         this.id = id;
-        this.controlNumber = controlNumber;
         this.name = name;
         this.numberAddress = numberAddress;
         this.streetAddress = streetAddress;

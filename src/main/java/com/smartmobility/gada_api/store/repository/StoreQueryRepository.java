@@ -26,8 +26,8 @@ public class StoreQueryRepository {
 
     public List<StoresDto> getStores(String region, List<String> keywords){
         return jpaQueryFactory
-                .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
-                        store.numberAddress, store.streetAddress, store.phone, store.businessType,
+                .select(new QStoresDto(store.id, store.localCode, store.name, store.numberAddress,
+                        store.streetAddress, store.phone, store.businessType,
                         store.lat, store.lon))
                 .from(storeDetails)
                 .join(store).on(storeDetails.store.eq(store))
@@ -47,8 +47,8 @@ public class StoreQueryRepository {
 
     public List<StoresDto> searchStores(String name){
         return jpaQueryFactory
-                .select(new QStoresDto(store.id, store.localCode, store.controlNumber, store.name,
-                        store.numberAddress, store.streetAddress, store.phone, store.businessType,
+                .select(new QStoresDto(store.id, store.localCode, store.name, store.numberAddress,
+                        store.streetAddress, store.phone, store.businessType,
                         store.lat, store.lon))
                 .from(store)
                 .where(store.name.contains(name))
@@ -57,7 +57,7 @@ public class StoreQueryRepository {
 
     public TotalStoreInfoDto getStoreInfo(Long storeId){
         return jpaQueryFactory
-                .select(new QTotalStoreInfoDto(store.id, store.controlNumber, store.name, store.numberAddress,
+                .select(new QTotalStoreInfoDto(store.id, store.name, store.numberAddress,
                         store.streetAddress, store.phone, store.businessType, store.lat, store.lon,
                         storeDetails.isWheelchair.sum().as("isWheelchair"), storeDetails.isBabyCar.sum().as("isBabyCar"),
                         storeDetails.isDisabledToilet.sum().as("isDisabledToilet"), storeDetails.isChildOk.sum().as("isChildOk"),
@@ -119,15 +119,21 @@ public class StoreQueryRepository {
     }
 
     private BooleanBuilder regionEq(String region){
+        BooleanBuilder builder = getMatchAgainstQuery(region);
+        return region.equals("all") ? null : builder;
+    }
+
+    private BooleanBuilder getMatchAgainstQuery(String region){
         BooleanBuilder builder = new BooleanBuilder();
-        NumberTemplate booleanTemplateNumber = Expressions.numberTemplate(Double.class,
+        NumberTemplate<Double> booleanTemplateNumber = Expressions.numberTemplate(Double.class,
                 "function('match',{0},{1})", store.numberAddress, region);
-        NumberTemplate booleanTemplateStreet = Expressions.numberTemplate(Double.class,
+        NumberTemplate<Double> booleanTemplateStreet = Expressions.numberTemplate(Double.class,
                 "function('match',{0},{1})", store.streetAddress, region);
+
         builder.and(booleanTemplateNumber.gt(0));
         builder.or(booleanTemplateStreet.gt(0));
 
-        return region.equals("all") ? null : builder;
+        return builder;
     }
 
     private BooleanExpression checkWheelchair(List<String> keywords){

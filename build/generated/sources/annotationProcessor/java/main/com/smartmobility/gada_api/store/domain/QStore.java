@@ -21,8 +21,6 @@ public class QStore extends EntityPathBase<Store> {
 
     public final StringPath businessType = createString("businessType");
 
-    public final StringPath controlNumber = createString("controlNumber");
-
     public final StringPath hours = createString("hours");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

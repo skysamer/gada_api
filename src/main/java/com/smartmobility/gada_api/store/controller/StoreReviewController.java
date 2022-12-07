@@ -38,7 +38,7 @@ public class StoreReviewController {
             @ApiResponse(code = 500, message = "이미지 업로드 오류"),
     })
     @PostMapping("/review")
-    public ResponseEntity<HttpBodyMessage> review(@RequestPart(value = "review") StoreReviewForm reviewForm,
+    public ResponseEntity<HttpBodyMessage> post(@RequestPart(value = "review") StoreReviewForm reviewForm,
                                                   @Nullable @RequestPart(value = "image", required = false) List<MultipartFile> images,
                                                   @RequestHeader("X-AUTH-TOKEN") String token){
         Member member;
@@ -48,7 +48,7 @@ public class StoreReviewController {
             log.error(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        HttpBodyMessage result = service.review(reviewForm, images, member);
+        HttpBodyMessage result = service.post(reviewForm, images, member);
         if(result.getCode().equals("fail")){
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }

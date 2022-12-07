@@ -11,6 +11,11 @@ public class HomeController {
     private final JwtTokenProvider jwtTokenProvider;
     @GetMapping("/")
     public String home(){
-        return "hello gada 0.1.9";
+        return "hello gada 0.1.10";
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        throw new RuntimeException();
     }
 }

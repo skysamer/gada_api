@@ -19,10 +19,6 @@ public class Store {
     @Column(name = "local_code")
     private String localCode;
 
-    @ApiModelProperty(value = "제어코드")
-    @Column(name = "control_number")
-    private String controlNumber;
-
     @ApiModelProperty(value = "이름")
     private String name;
 
