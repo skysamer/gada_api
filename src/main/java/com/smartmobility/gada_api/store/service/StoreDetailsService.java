@@ -55,6 +55,13 @@ public class StoreDetailsService {
         return new HttpBodyMessage("success", "제보하기 성공");
     }
 
+    private int checkCertificated(List<MultipartFile> images, boolean isAround, boolean isAlreadyCertificated){
+        if (images == null || images.size() == 0 || !isAround || isAlreadyCertificated) {
+            return 0;
+        }
+        return 1;
+    }
+
     private void uploadImage(List<MultipartFile> images, StoreDetails details) throws IOException {
         if (images == null || images.size() == 0) {
             return;
@@ -65,13 +72,6 @@ public class StoreDetailsService {
             StoreDetailsImage imageEntity = new StoreDetailsImage(imageUrl, details);
             detailsImageRepository.save(imageEntity);
         }
-    }
-
-    private int checkCertificated(List<MultipartFile> images, boolean isAround, boolean isAlreadyCertificated){
-        if (images == null || images.size() == 0 || !isAround || isAlreadyCertificated) {
-            return 0;
-        }
-        return 1;
     }
 
     public PageResult<MyReportStoreDto> getMyStores(Member member, Pageable pageable){

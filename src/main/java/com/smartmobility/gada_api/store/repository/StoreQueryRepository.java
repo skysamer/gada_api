@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.smartmobility.gada_api.global.util.NativeQueryBuilder;
 import com.smartmobility.gada_api.store.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ import static com.smartmobility.gada_api.store.domain.QStoreReview.storeReview;
 @RequiredArgsConstructor
 public class StoreQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final NativeQueryBuilder nativeQueryBuilder;
 
     public List<StoresDto> getStores(String region, List<String> keywords){
         return jpaQueryFactory
@@ -119,21 +121,8 @@ public class StoreQueryRepository {
     }
 
     private BooleanBuilder regionEq(String region){
-        BooleanBuilder builder = getMatchAgainstQuery(region);
+        BooleanBuilder builder = nativeQueryBuilder.getMatchAgainstQuery(region);
         return region.equals("all") ? null : builder;
-    }
-
-    private BooleanBuilder getMatchAgainstQuery(String region){
-        BooleanBuilder builder = new BooleanBuilder();
-        NumberTemplate<Double> booleanTemplateNumber = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", store.numberAddress, region);
-        NumberTemplate<Double> booleanTemplateStreet = Expressions.numberTemplate(Double.class,
-                "function('match',{0},{1})", store.streetAddress, region);
-
-        builder.and(booleanTemplateNumber.gt(0));
-        builder.or(booleanTemplateStreet.gt(0));
-
-        return builder;
     }
 
     private BooleanExpression checkWheelchair(List<String> keywords){

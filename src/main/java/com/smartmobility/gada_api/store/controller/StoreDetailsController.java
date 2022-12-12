@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreDetailsController {
     private final StoreDetailsService service;
-    private final UserInfoExtractor extractor;
 
     @ApiOperation(value = "함께가게 제보하기")
     @ApiResponses({
@@ -35,13 +35,11 @@ public class StoreDetailsController {
     @PostMapping("/report")
     public ResponseEntity<HttpBodyMessage> report(@RequestPart(value = "details") StoreDetailsForm detailsForm,
                                                   @Nullable @RequestPart(value = "image", required = false) List<MultipartFile> images,
-                                                  @RequestHeader("X-AUTH-TOKEN") String token){
-        Member member;
-        try {
-            member = extractor.extract(token);
-        }catch (Exception e){
+                                                  @AuthenticationPrincipal Member member){
+        if(member == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         HttpBodyMessage result = service.report(detailsForm, images, member);
         if(result.getCode().equals("fail")){
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
@@ -55,15 +53,13 @@ public class StoreDetailsController {
             @ApiResponse(code = 400, message = "유효하지 않은 jwt 토큰")
     })
     @GetMapping("/report/my/{page}/{size}")
-    public ResponseEntity<PageResult<MyReportStoreDto>> getMyReportStores(@RequestHeader("X-AUTH-TOKEN") String token,
+    public ResponseEntity<PageResult<MyReportStoreDto>> getMyReportStores(@AuthenticationPrincipal Member member,
                                                                           @PathVariable Integer page,
                                                                           @PathVariable Integer size){
-        Member member;
-        try {
-            member = extractor.extract(token);
-        }catch (Exception e){
+        if(member == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         PageResult<MyReportStoreDto> result = service.getMyStores(member, PageRequest.of(page, size));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

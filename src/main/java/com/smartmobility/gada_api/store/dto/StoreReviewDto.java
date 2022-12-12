@@ -17,10 +17,8 @@ public class StoreReviewDto {
     private String tag;
     @ApiModelProperty(value = "후기")
     private String reviews;
-
     @ApiModelProperty(value = "닉네임")
     private String nickname;
-
     @ApiModelProperty(value = "생성일")
     private LocalDateTime createdAt;
 

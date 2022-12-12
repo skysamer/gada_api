@@ -13,13 +13,9 @@ public class UserInfoExtractor {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-    public Member extract(String token){
+    public Member extract(String token) {
         String[] pk;
-        try{
-            pk = jwtTokenProvider.getUserPk(token).split("&");
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+        pk = jwtTokenProvider.getUserPk(token).split("&");
         return memberRepository.findByEmailAndProvider(pk[0], Provider.valueOf(pk[1]));
     }
 }

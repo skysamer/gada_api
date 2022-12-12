@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class RecommendedStoreScheduler {
     private final ModelMapper modelMapper;
     private final Log log = LogFactory.getLog(getClass());
 
-//    @Scheduled(cron = "0 0 0 1,15 * *")
+    @Scheduled(cron = "0 0 0 1,15 * *")
     public void updateRecommendedStore(){
         List<RecommendedStoreDto> reportedStores = storeQueryRepository.getReportedStoreWithImage();
         if(reportedStores.size() == 0){

@@ -25,6 +25,7 @@ public class StoreFavoritesService {
     public HttpBodyMessage register(Long storeId, Member member){
         Store store = storeRepository.findById(storeId).orElse(null);
         boolean isExists = favoritesRepository.existsByStoreAndMember(store, member);
+
         if(isExists){
             favoritesRepository.deleteByStoreAndMember(store, member);
             return new HttpBodyMessage("success", "즐겨찾기 등록해제");

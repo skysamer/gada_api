@@ -34,24 +34,23 @@ public class CsvReadTest {
 
     @Test
     void test_가게정보_입력() throws IOException, CsvException {
-        CSVReader csvReader = new CSVReader(new FileReader("/Users/isangmin/Downloads/store_list.csv"));
+        CSVReader csvReader = new CSVReader(new FileReader("/Users/isangmin/Downloads/all_combine_by_road_addr_with_latlon.csv"));
         List<String[]> csv = csvReader.readAll();
 
+        int idx = 1;
         for(int i=1; i<csv.size(); i++){
+
             Store store = storeRepository.findByName(csv.get(i)[3]);
             StoreCsvDto storeCsvDto = StoreCsvDto.builder()
-                    .localCode(csv.get(i)[1])
-                    .name(csv.get(i)[3])
-                    .numberAddress(csv.get(i)[4])
-                    .streetAddress(csv.get(i)[5])
-                    .phone(csv.get(i)[6])
-                    .hours(csv.get(i)[7])
-                    .businessType(csv.get(i)[8])
-                    .lat(csv.get(i)[18])
-                    .lon(csv.get(i)[19])
+                    .name(csv.get(i)[0])
+                    .streetAddress(csv.get(i)[2])
+                    .phone(csv.get(i)[4])
+                    .hours(csv.get(i)[3])
+                    .businessType(csv.get(i)[1])
+                    .lat(csv.get(i)[5])
+                    .lon(csv.get(i)[6])
                     .build();
             log.info(storeCsvDto.toString());
-            log.info("i = "+i);
             if(store == null){
                 Store newStore = modelMapper.map(storeCsvDto, Store.class);
                 storeRepository.save(newStore);

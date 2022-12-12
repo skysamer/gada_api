@@ -8,14 +8,8 @@ import lombok.ToString;
 @Getter @Builder
 @ToString
 public class StoreCsvDto {
-    @ApiModelProperty(value = "자치단체구분코드")
-    private String localCode;
-
     @ApiModelProperty(value = "이름")
     private String name;
-
-    @ApiModelProperty(value = "지번주소")
-    private String numberAddress;
 
     @ApiModelProperty(value = "도로명주소")
     private String streetAddress;

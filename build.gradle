@@ -9,12 +9,12 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'jacoco'
-//	id 'war'
 }
 
 group = 'com.smartmobility'
 version = ''
 sourceCompatibility = "1.8"
+//sourceCompatibility = "11"
 
 configurations {
 	compileOnly {

@@ -19,6 +19,9 @@ import java.util.List;
 public class StoreService {
     private final StoreQueryRepository storeQueryRepository;
     private final StoreFavoritesQueryRepository favoritesQueryRepository;
+
+    private static final Long NOT_FOUND = -1L;
+
     private final Log log = LogFactory.getLog(getClass());
 
     public List<StoresDto> getStores(String region, List<String> keywords){
@@ -31,17 +34,23 @@ public class StoreService {
 
     public TotalStoreInfoDto getStore(Long id, Member member){
         TotalStoreInfoDto storeInfoDto = storeQueryRepository.getStoreInfo(id);
-
-        long reviewCount = storeQueryRepository.getReviewCount(id);
-        storeInfoDto.countReview(reviewCount);
-
-        boolean isFavoritesExists = favoritesQueryRepository.isMyFavoritesExists(id, member);
-        storeInfoDto.checkFavorites(isFavoritesExists);
+        setStoreReviewCountInfo(id, storeInfoDto);
+        setStoreIsMyFavoritesInfo(id, storeInfoDto, member);
         return storeInfoDto;
     }
 
+    private void setStoreReviewCountInfo(Long id, TotalStoreInfoDto storeInfoDto){
+        long reviewCount = storeQueryRepository.getReviewCount(id);
+        storeInfoDto.countReview(reviewCount);
+    }
+
+    private void setStoreIsMyFavoritesInfo(Long id, TotalStoreInfoDto storeInfoDto, Member member){
+        boolean isFavoritesExists = favoritesQueryRepository.isMyFavoritesExists(id, member);
+        storeInfoDto.checkFavorites(isFavoritesExists);
+    }
+
     public List<RecommendedStoreDto> getRecommendedStores(Member member){
-        if(member.getId().equals(-1L)){
+        if(member == null){
             return storeQueryRepository.getRecommendedStore();
         }
 

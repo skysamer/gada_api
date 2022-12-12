@@ -5,13 +5,13 @@ import com.smartmobility.gada_api.store.dto.RecommendedStoreDto;
 import com.smartmobility.gada_api.store.dto.StoresDto;
 import com.smartmobility.gada_api.store.dto.TotalStoreInfoDto;
 import com.smartmobility.gada_api.store.service.StoreService;
-import com.smartmobility.gada_api.store.util.UserInfoExtractor;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService service;
-    private final UserInfoExtractor extractor;
+    private static final Long NOT_FOUND = -1L;
+
     private final Log log = LogFactory.getLog(getClass());
 
     @ApiOperation(value = "자치단체 별 가게 리스트 정보")
@@ -61,12 +62,9 @@ public class StoreController {
             @ApiResponse(code = 200, message = "조회성공")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id, @RequestHeader("X-AUTH-TOKEN") String token){
-        Member member;
-        try {
-            member = extractor.extract(token);
-        }catch (Exception e){
-            TotalStoreInfoDto store = service.getStore(id, new Member(-1L));
+    public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id, @AuthenticationPrincipal Member member){
+        if(member == null){
+            TotalStoreInfoDto store = service.getStore(id, new Member(NOT_FOUND));
             return new ResponseEntity<>(store, HttpStatus.OK);
         }
         TotalStoreInfoDto store = service.getStore(id, member);
@@ -78,14 +76,8 @@ public class StoreController {
             @ApiResponse(code = 200, message = "조회성공")
     })
     @GetMapping("/recommend")
-    public ResponseEntity<List<RecommendedStoreDto>> getRecommendedStores(@RequestHeader("X-AUTH-TOKEN") String token){
-        Member member;
-        try {
-            member = extractor.extract(token);
-        }catch (Exception e){
-            List<RecommendedStoreDto> result = service.getRecommendedStores(new Member(-1L));
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
+    public ResponseEntity<List<RecommendedStoreDto>> getRecommendedStores(@AuthenticationPrincipal Member member){
+
         List<RecommendedStoreDto> result = service.getRecommendedStores(member);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
