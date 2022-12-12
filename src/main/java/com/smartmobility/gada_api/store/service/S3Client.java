@@ -17,25 +17,25 @@ import java.util.UUID;
 public class S3Client {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     @Value("${cloud.aws.url}")
     private String awsS3Url;
-
     @Value("${cloud.aws.s3.dir}")
     private String dir;
+    @Value("${is-dev}")
+    private String isDev;
     private final AmazonS3 amazonS3;
     private final Log log = LogFactory.getLog(getClass());
 
     public String upload(MultipartFile image) throws IOException {
-        String s3FileName = makeS3Filename(image.getOriginalFilename(), false);
+        String s3FileName = makeS3Filename(image.getOriginalFilename(), isDev);
         sendImageObjectToS3(image, s3FileName);
 
         log.info("image upload complete");
         return amazonS3.getUrl(bucket, s3FileName).toString();
     }
 
-    private String makeS3Filename(String originalImageName, boolean isDev){
-        if(isDev){
+    private String makeS3Filename(String originalImageName, String isDev){
+        if(isDev.equals("yes")){
             return dir +  "/" + UUID.randomUUID() + "-" + originalImageName;
         }
         return UUID.randomUUID() + "-" + originalImageName;
