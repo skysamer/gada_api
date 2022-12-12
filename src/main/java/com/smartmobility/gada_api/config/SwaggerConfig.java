@@ -2,6 +2,7 @@ package com.smartmobility.gada_api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,6 +21,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket restAPI() {
         return new Docket(DocumentationType.OAS_30)
+                .ignoredParameterTypes(AuthenticationPrincipal.class)
                 .useDefaultResponseMessages(false)
                 .directModelSubstitute(LocalTime.class, String.class)
                 .apiInfo(apiInfo())

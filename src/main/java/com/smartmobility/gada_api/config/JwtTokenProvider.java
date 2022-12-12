@@ -29,11 +29,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final Log log = LogFactory.getLog(getClass());
-
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
     private final OauthService service;
-
 
     @PostConstruct
     protected void init() {
@@ -46,22 +44,6 @@ public class JwtTokenProvider {
         Date now = new Date();
 
         long tokenValidTime = 24 * 60 * 60 * 1000L;
-
-        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidTime))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String createLongTermTokenLogin(String sub, String role) {
-        Claims claims = Jwts.claims().setSubject(sub);
-        claims.put("role", role);
-        Date now = new Date();
-
-        long tokenValidTime = ((24 * 60 * 60 * 1000L) * 30) * 3;
 
         Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         return Jwts.builder()
