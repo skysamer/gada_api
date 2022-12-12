@@ -35,9 +35,9 @@ public class S3Client {
     }
 
     private String makeS3Filename(String originalImageName, boolean isDev){
-        if(isDev){
-            return dir +  "/" + UUID.randomUUID() + "-" + originalImageName;
-        }
+//        if(isDev){
+//            return dir +  "/" + UUID.randomUUID() + "-" + originalImageName;
+//        }
         return UUID.randomUUID() + "-" + originalImageName;
     }
 
