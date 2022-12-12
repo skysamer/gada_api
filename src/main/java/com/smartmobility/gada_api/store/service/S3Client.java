@@ -21,8 +21,8 @@ public class S3Client {
     @Value("${cloud.aws.url}")
     private String awsS3Url;
 
-    @Value("${cloud.aws.s3.dir}")
-    private String dir;
+//    @Value("${cloud.aws.s3.dir}")
+//    private String dir;
     private final AmazonS3 amazonS3;
     private final Log log = LogFactory.getLog(getClass());
 
