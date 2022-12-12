@@ -34,7 +34,6 @@ public class StoreDetailsService {
     private final StoreDetailsQueryRepository detailsQueryRepository;
     private final Log log = LogFactory.getLog(getClass());
 
-
     public HttpBodyMessage report(StoreDetailsForm detailsForm, List<MultipartFile> images, Member member) {
         Store store = storeRepository.findById(detailsForm.getStoreId()).orElse(null);
         if(store == null){
