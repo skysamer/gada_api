@@ -57,7 +57,7 @@ public class OauthController {
         if(resultDTO.getRole() == null){
             return new ResponseEntity<>(resultDTO, HttpStatus.CREATED);
         }
-        String jwtToken = jwtTokenProvider.createTokenLogin(resultDTO.getEmail() + "&" + resultDTO.getProvider().name(),
+        String jwtToken = jwtTokenProvider.test(resultDTO.getEmail() + "&" + resultDTO.getProvider().name(),
                 resultDTO.getRole());
         response.setHeader("X-AUTH-TOKEN", jwtToken);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);

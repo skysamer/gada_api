@@ -54,6 +54,22 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String test(String sub, Role role) {
+        Claims claims = Jwts.claims().setSubject(sub);
+        claims.put("role", role);
+        Date now = new Date();
+
+        long tokenValidTime = 60 * 1000L;
+
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + tokenValidTime))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public Authentication getAuthentication(String token) {
         Member member = (Member) service.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(member, "", Collections.singleton(new SimpleGrantedAuthority(member.getRole().name())));
