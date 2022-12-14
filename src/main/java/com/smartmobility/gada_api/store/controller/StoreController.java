@@ -59,7 +59,8 @@ public class StoreController {
             @ApiImplicitParam(name = "id", value = "가게의 고유 시퀀스")
     })
     @ApiResponses({
-            @ApiResponse(code = 200, message = "조회성공")
+            @ApiResponse(code = 200, message = "조회성공"),
+            @ApiResponse(code = 206, message = "조회성공 but, 토큰오륲")
     })
     @GetMapping("/{id}")
     public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id, @AuthenticationPrincipal Member member){
@@ -73,7 +74,8 @@ public class StoreController {
 
     @ApiOperation(value = "가다추천 함께가게 조회")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "조회성공")
+            @ApiResponse(code = 200, message = "조회성공"),
+            @ApiResponse(code = 206, message = "조회성공 but, 토큰오륲")
     })
     @GetMapping("/recommend")
     public ResponseEntity<List<RecommendedStoreDto>> getRecommendedStores(@AuthenticationPrincipal Member member){
