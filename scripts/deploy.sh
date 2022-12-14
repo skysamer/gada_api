@@ -21,15 +21,27 @@ echo "> JAR Name: $JAR_NAME"
 
 chmod 777 /home/ec2-user/action/$JAR_NAME
 
+###############3 현재 구동중인 포트와 반대포트 얻기 ################
+CURRENT_PORT=$(curl -L https://gadaapiserver.ddns.net/port)
+
+NEXT_PORT=0
+
+if [ $CURRENT_PORT -eq 8400 ]; then
+        NEXT_PORT=8600
+else
+        NEXT_PORT=8400
+fi
+############################################################
+
 nohup java -jar \
--Dspring.config.location=/home/ec2-user/action/application-real8400.yml \
+-Dspring.config.location=/home/ec2-user/action/application-real$NEXT_PORT.yml \
 $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
 sleep 40
 
 echo "> 리버스 프록시 작업" >> debug.log
 
-echo "set \$service_url http://127.0.0.1:8400;" | sudo tee /etc/nginx/conf.d/service-url.inc
+echo "set \$service_url http://127.0.0.1:$NEXT_PORT;" | sudo tee /etc/nginx/conf.d/service-url.inc
 
 sudo systemctl restart nginx
 
