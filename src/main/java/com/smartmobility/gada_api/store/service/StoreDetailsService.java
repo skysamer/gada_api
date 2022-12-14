@@ -34,7 +34,7 @@ public class StoreDetailsService {
     private final StoreDetailsQueryRepository detailsQueryRepository;
     private final Log log = LogFactory.getLog(getClass());
 
-    public HttpBodyMessage report(StoreDetailsForm detailsForm, List<MultipartFile> images, Member member) {
+    public HttpBodyMessage report(StoreDetailsForm detailsForm, List<MultipartFile> images, Member member) throws IOException {
         Store store = storeRepository.findById(detailsForm.getStoreId()).orElse(null);
         if(store == null){
             return new HttpBodyMessage("fail", "가게정보없음");
@@ -44,12 +44,8 @@ public class StoreDetailsService {
         boolean isAlreadyCertificated = detailsRepository.existsByStoreAndMemberAndIsCertificated(store, member, 1);
         int isCertificated = checkCertificated(images, detailsForm.getIsAround(), isAlreadyCertificated);
         storeDetails.checkCertificate(isCertificated);
-        try{
-            uploadImage(images, storeDetails);
-        }catch (Exception e){
-            log.error(e);
-            throw new RuntimeException();
-        }
+
+        uploadImage(images, storeDetails);
         detailsRepository.save(storeDetails);
         return new HttpBodyMessage("success", "제보하기 성공");
     }

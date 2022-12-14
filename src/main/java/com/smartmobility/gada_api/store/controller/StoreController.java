@@ -65,7 +65,7 @@ public class StoreController {
     public ResponseEntity<TotalStoreInfoDto> getStore(@PathVariable Long id, @AuthenticationPrincipal Member member){
         if(member == null){
             TotalStoreInfoDto store = service.getStore(id, new Member(NOT_FOUND));
-            return new ResponseEntity<>(store, HttpStatus.OK);
+            return new ResponseEntity<>(store, HttpStatus.PARTIAL_CONTENT);
         }
         TotalStoreInfoDto store = service.getStore(id, member);
         return new ResponseEntity<>(store, HttpStatus.OK);
@@ -77,7 +77,10 @@ public class StoreController {
     })
     @GetMapping("/recommend")
     public ResponseEntity<List<RecommendedStoreDto>> getRecommendedStores(@AuthenticationPrincipal Member member){
-
+        if(member == null){
+            List<RecommendedStoreDto> result = service.getRecommendedStores(new Member(NOT_FOUND));
+            return new ResponseEntity<>(result, HttpStatus.PARTIAL_CONTENT);
+        }
         List<RecommendedStoreDto> result = service.getRecommendedStores(member);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

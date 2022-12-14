@@ -1,6 +1,5 @@
 package com.smartmobility.gada_api;
 
-import com.smartmobility.gada_api.config.JwtTokenProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;

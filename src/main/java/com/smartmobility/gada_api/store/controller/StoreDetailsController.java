@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Api(tags = {"함께 가게 제보하기 api"})
@@ -35,7 +36,7 @@ public class StoreDetailsController {
     @PostMapping("/report")
     public ResponseEntity<HttpBodyMessage> report(@RequestPart(value = "details") StoreDetailsForm detailsForm,
                                                   @Nullable @RequestPart(value = "image", required = false) List<MultipartFile> images,
-                                                  @AuthenticationPrincipal Member member){
+                                                  @AuthenticationPrincipal Member member) throws IOException {
         if(member == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

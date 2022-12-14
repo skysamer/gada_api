@@ -14,13 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StoreService {
     private final StoreQueryRepository storeQueryRepository;
     private final StoreFavoritesQueryRepository favoritesQueryRepository;
-
-    private static final Long NOT_FOUND = -1L;
 
     private final Log log = LogFactory.getLog(getClass());
 
@@ -50,11 +48,8 @@ public class StoreService {
     }
 
     public List<RecommendedStoreDto> getRecommendedStores(Member member){
-        if(member == null){
-            return storeQueryRepository.getRecommendedStore();
-        }
-
         List<RecommendedStoreDto> recommendedStores = storeQueryRepository.getRecommendedStore();
+
         for(RecommendedStoreDto recommendedStore : recommendedStores){
             boolean isFavoritesExists = favoritesQueryRepository.isMyFavoritesExists(recommendedStore.getStoreId(), member);
             recommendedStore.checkIsMyFavorites(isFavoritesExists);
