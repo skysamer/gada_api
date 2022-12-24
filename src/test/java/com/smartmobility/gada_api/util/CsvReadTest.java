@@ -1,6 +1,7 @@
 package com.smartmobility.gada_api.util;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.member.repository.MemberRepository;
@@ -15,8 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 @SpringBootTest
@@ -74,4 +74,39 @@ public class CsvReadTest {
         }
     }
 
+    @Test
+    void test_파일생성(){
+        File file = new File("/Users/isangmin/Downloads", "test.csv");
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter osw = new OutputStreamWriter(fos, "euc-kr");
+                CSVWriter writer = new CSVWriter(osw);
+        ) {
+            String[] row = {
+                    "날짜",
+                    "1종",
+                    "2종",
+                    "3종"
+            };
+            writer.writeNext(row);
+            for(int i=0; i<200; i++){
+                int m = (int) (Math.random() * 12 + 1);
+                String month = m >= 10 ? String.valueOf(m) : "0" + m;
+                int d = (int) (Math.random() * 30 + 1);
+                String day = d >= 10 ? String.valueOf(d) : "0" + d;
+
+                String date = 2022 + "/" + month + "/" + day;
+
+                int one = (int) (Math.random() * 70000 + 20000);
+                int two = (int) (Math.random() * 70000) + 20000;
+                int three = (int) (Math.random() * 70000) + 20000;
+
+                String[] row2 = {date, String.valueOf(one), String.valueOf(two), String.valueOf(three)};
+                writer.writeNext(row2);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

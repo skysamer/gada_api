@@ -12,7 +12,7 @@ public class HomeController {
     private String port;
     @GetMapping("/")
     public String home() {
-        return "hello gada 0.1.21";
+        return "hello gada 0.1.22";
     }
 
     @GetMapping("/port")

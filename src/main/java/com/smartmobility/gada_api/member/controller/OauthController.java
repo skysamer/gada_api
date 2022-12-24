@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OauthController {
     private final OauthService oauthService;
-    private final UserInfoExtractor extractor;
     private final JwtTokenProvider jwtTokenProvider;
     private final Log log = LogFactory.getLog(getClass());
 
@@ -78,6 +78,7 @@ public class OauthController {
             oauthService.detailsSignUp(id, detailsSignUpForm);
         }catch (Exception e){
             log.error(e);
+            if(e.getMessage().equals("닉네임중복")) return new ResponseEntity<>(HttpStatus.CONFLICT);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,7 +90,8 @@ public class OauthController {
     })
     @ApiResponses({
             @ApiResponse(code = 204, message = "삭제성공"),
-            @ApiResponse(code = 400, message = "유저 정보가 존재하지 않음")
+            @ApiResponse(code = 400, message = "유저 정보가 존재하지 않음"),
+            @ApiResponse(code = 409, message = "닉네임 중복")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> remove(@PathVariable Long id){
@@ -109,18 +111,16 @@ public class OauthController {
             @ApiResponse(code = 500, message = "이미지등록실패")
     })
     @PutMapping("/profile-img")
-    public ResponseEntity<Object> register(@RequestHeader("X-AUTH-TOKEN") String token,
-                                           @RequestPart MultipartFile image){
-        Member member;
+    public ResponseEntity<Object> register(@AuthenticationPrincipal Member member, @RequestPart MultipartFile image){
+        if(member == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         try{
-            member = extractor.extract(token);
             oauthService.register(member, image);
         }catch (IOException e){
             log.error(e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }catch (Exception e){
-            log.error(e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -131,15 +131,11 @@ public class OauthController {
             @ApiResponse(code = 400, message = "유효하지 않은 토큰")
     })
     @DeleteMapping("/profile-img")
-    public ResponseEntity<Object> remove(@RequestHeader("X-AUTH-TOKEN") String token){
-        Member member;
-        try{
-            member = extractor.extract(token);
-            oauthService.removeProfileImg(member);
-        }catch (Exception e){
-            log.error(e);
+    public ResponseEntity<Object> remove(@AuthenticationPrincipal Member member){
+        if(member == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        oauthService.removeProfileImg(member);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

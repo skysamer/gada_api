@@ -72,7 +72,11 @@ public class OauthService implements UserDetailsService {
     public void detailsSignUp(Long id, DetailsSignUpForm detailsSignUpForm){
         Member member = memberRepository.findById(id).orElse(null);
         if(member == null){
-            throw new RuntimeException();
+            throw new RuntimeException("초기회원정보없음");
+        }
+        boolean isNicknameDuplicated = checkNicknameIsDuplicate(detailsSignUpForm.getNickname());
+        if(isNicknameDuplicated){
+            throw new RuntimeException("닉네임중복");
         }
 
         Terms terms = new Terms(detailsSignUpForm.getRequiredTermsYn(), detailsSignUpForm.getOptionalTermsYn());
@@ -84,6 +88,10 @@ public class OauthService implements UserDetailsService {
                 .build();
         member.detailsSignUp(terms, details, detailsSignUpForm.getNickname());
         log.info(member.toString());
+    }
+
+    private boolean checkNicknameIsDuplicate(String nickname){
+        return memberRepository.existsByNickname(nickname);
     }
 
     public void remove(Long id){
