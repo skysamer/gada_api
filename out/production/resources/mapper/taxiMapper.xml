@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.smartmobility.gada_api.mapper.TaxiMapper">
+
+  <select id="selectAll" resultType="com.smartmobility.gada_api.dto.taxi.TaxiListDTO">
+  	SELECT * FROM gada.call_taxi;
+  </select>
+
+  <select id="selectAllByRegion" parameterType="java.lang.String" resultType="com.smartmobility.gada_api.dto.taxi.TaxiListDTO">
+ 	  	SELECT * FROM gada.call_taxi WHERE division = #{division};
+  </select> 
+  
+  <select id="selectTaxiInfoByIdx" parameterType="Integer" resultType="com.smartmobility.gada_api.dto.taxi.TaxiInfoDTO">
+		SELECT * FROM gada.call_taxi_info WHERE idx = #{idx};
+  </select> 
+  
+</mapper>

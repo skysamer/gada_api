@@ -1,13 +1,14 @@
 package com.smartmobility.gada_api.member.controller;
 
 import com.smartmobility.gada_api.config.JwtTokenProvider;
+import com.smartmobility.gada_api.global.dto.HttpBodyMessage;
 import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.member.dto.DetailsSignUpForm;
 import com.smartmobility.gada_api.member.dto.LoginResultDTO;
 import com.smartmobility.gada_api.member.dto.SocialLoginDTO;
 import com.smartmobility.gada_api.member.service.OauthService;
 import com.smartmobility.gada_api.member.type.Provider;
-import com.smartmobility.gada_api.store.util.UserInfoExtractor;
+import com.smartmobility.gada_api.store.dto.NicknameForm;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -46,7 +47,6 @@ public class OauthController {
                                                        HttpServletResponse response) {
         Provider socialLoginType = Provider.valueOf(loginDTO.getProvider().toUpperCase());
         LoginResultDTO resultDTO;
-
         try {
             resultDTO = oauthService.socialLogin(token, socialLoginType, loginDTO.getSub());
         }catch (Exception e){
@@ -77,11 +77,23 @@ public class OauthController {
         try{
             oauthService.detailsSignUp(id, detailsSignUpForm);
         }catch (Exception e){
-            log.error(e);
-            if(e.getMessage().equals("닉네임중복")) return new ResponseEntity<>(HttpStatus.CONFLICT);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ApiOperation(value = "닉네임변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "닉네임변경완료"),
+            @ApiResponse(code = 409, message = "닉네임중복")
+    })
+    @PatchMapping("/nickname")
+    public ResponseEntity<HttpBodyMessage> modify(@AuthenticationPrincipal Member member, @RequestBody NicknameForm nicknameForm){
+        HttpBodyMessage result = oauthService.modify(member, nicknameForm.getNickname());
+        if(result.getCode().equals("fail")){
+            return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원정보삭제")

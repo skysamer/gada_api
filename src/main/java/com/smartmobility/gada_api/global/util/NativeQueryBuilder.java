@@ -9,6 +9,7 @@ import static com.smartmobility.gada_api.store.domain.QStore.store;
 
 @Component
 public class NativeQueryBuilder {
+    /*match against 쿼리 구문을 반환하는 메서드*/
     public BooleanBuilder getMatchAgainstQuery(String region){
         BooleanBuilder builder = new BooleanBuilder();
         NumberTemplate<Double> booleanTemplateNumber = Expressions.numberTemplate(Double.class,

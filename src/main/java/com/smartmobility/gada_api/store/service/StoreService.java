@@ -22,14 +22,17 @@ public class StoreService {
 
     private final Log log = LogFactory.getLog(getClass());
 
+    /*각 자치구별 제보된 가게 리스트 조회*/
     public List<StoresDto> getStores(String region, List<String> keywords){
         return storeQueryRepository.getStores(region, keywords);
     }
 
+    /*검색어에 해당하는 가게목록 조회*/
     public List<StoresDto> searchStores(String name){
         return storeQueryRepository.searchStores(name);
     }
 
+    /*가게 상세정보조회*/
     public TotalStoreInfoDto getStore(Long id, Member member){
         TotalStoreInfoDto storeInfoDto = storeQueryRepository.getStoreInfo(id);
         setStoreReviewCountInfo(id, storeInfoDto);
@@ -37,16 +40,19 @@ public class StoreService {
         return storeInfoDto;
     }
 
+    /*가게의 리뷰개수 정보를 가게상세정보 폼에 추가*/
     private void setStoreReviewCountInfo(Long id, TotalStoreInfoDto storeInfoDto){
         long reviewCount = storeQueryRepository.getReviewCount(id);
         storeInfoDto.countReview(reviewCount);
     }
 
+    /*가게의 나의 즐겨찾기 여부를 가게상세정보 폼에 추가*/
     private void setStoreIsMyFavoritesInfo(Long id, TotalStoreInfoDto storeInfoDto, Member member){
         boolean isFavoritesExists = favoritesQueryRepository.isMyFavoritesExists(id, member);
         storeInfoDto.checkFavorites(isFavoritesExists);
     }
 
+    /*가다추천 함께가게 리스트 조회*/
     public List<RecommendedStoreDto> getRecommendedStores(Member member){
         List<RecommendedStoreDto> recommendedStores = storeQueryRepository.getRecommendedStore();
 

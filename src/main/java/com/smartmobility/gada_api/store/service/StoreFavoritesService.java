@@ -22,6 +22,7 @@ public class StoreFavoritesService {
     private final StoreFavoritesQueryRepository favoritesQueryRepository;
     private final StoreRepository storeRepository;
 
+    /*가게 즐겨찾기 등록 혹은 해제*/
     public HttpBodyMessage register(Long storeId, Member member){
         Store store = storeRepository.findById(storeId).orElse(null);
         boolean isExists = favoritesRepository.existsByStoreAndMember(store, member);
@@ -35,6 +36,7 @@ public class StoreFavoritesService {
         return new HttpBodyMessage("success", "즐겨찾기 등록");
     }
 
+    /*내가 즐겨찾기한 가게 목록 조회*/
     public List<MyFavoritesStoreDto> getMyFavorites(Member member){
         return favoritesQueryRepository.getMyFavoritesStores(member);
     }

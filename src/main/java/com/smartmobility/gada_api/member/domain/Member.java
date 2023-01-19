@@ -75,6 +75,10 @@ public class Member implements UserDetails {
         return this.nickname == null ? randomNickname : nickname;
     }
 
+    public void update(String nickname){
+        this.nickname = nickname;
+    }
+
     public void register(String profileImgUrl){
         this.profileImgUrl = profileImgUrl;
     }

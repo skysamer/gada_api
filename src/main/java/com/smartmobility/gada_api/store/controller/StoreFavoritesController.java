@@ -4,7 +4,6 @@ import com.smartmobility.gada_api.global.dto.HttpBodyMessage;
 import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.store.dto.MyFavoritesStoreDto;
 import com.smartmobility.gada_api.store.service.StoreFavoritesService;
-import com.smartmobility.gada_api.store.util.UserInfoExtractor;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;

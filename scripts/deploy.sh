@@ -22,7 +22,7 @@ echo "> JAR Name: $JAR_NAME"
 chmod 777 /home/ec2-user/action/$JAR_NAME
 
 ###############3 현재 구동중인 포트와 반대포트 얻기 ################
-CURRENT_PORT=$(curl -L https://gadaapiserver.ddns.net/port)
+CURRENT_PORT=$(curl -L https://gada.kro.kr/port)
 
 NEXT_PORT=0
 

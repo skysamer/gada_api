@@ -6,7 +6,6 @@ import com.smartmobility.gada_api.member.domain.Member;
 import com.smartmobility.gada_api.store.dto.MyReportStoreDto;
 import com.smartmobility.gada_api.store.dto.StoreDetailsForm;
 import com.smartmobility.gada_api.store.service.StoreDetailsService;
-import com.smartmobility.gada_api.store.util.UserInfoExtractor;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

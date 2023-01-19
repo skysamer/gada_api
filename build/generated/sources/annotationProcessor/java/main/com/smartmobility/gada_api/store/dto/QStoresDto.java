@@ -3,7 +3,7 @@ package com.smartmobility.gada_api.store.dto;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.ConstructorExpression;
-import javax.annotation.processing.Generated;
+import javax.annotation.Generated;
 
 /**
  * com.smartmobility.gada_api.store.dto.QStoresDto is a Querydsl Projection type for StoresDto

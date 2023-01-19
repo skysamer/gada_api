@@ -33,7 +33,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("GADA Application REST API")
+                .title("GADA Application REST API _ ver Nickname")
                 .contact(new Contact("이상민", "https://github.com/skysamer", "smtkdals94@gmail.com"))
                 .version("0.1.1")
                 .description("GADA 애플리케이션 api 문서")

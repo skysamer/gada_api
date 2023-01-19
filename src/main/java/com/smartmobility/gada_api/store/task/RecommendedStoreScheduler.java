@@ -21,6 +21,7 @@ public class RecommendedStoreScheduler {
     private final ModelMapper modelMapper;
     private final Log log = LogFactory.getLog(getClass());
 
+    /*가다추천 함께가게를 매월 1일, 15일에 업데이트하는 스케줄*/
     @Scheduled(cron = "0 0 0 1,15 * *")
     public void updateRecommendedStore(){
         List<RecommendedStoreDto> reportedStores = storeQueryRepository.getReportedStoreWithImage();

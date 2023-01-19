@@ -1,5 +1,6 @@
 package com.smartmobility.gada_api.member.service;
 
+import com.smartmobility.gada_api.global.dto.HttpBodyMessage;
 import com.smartmobility.gada_api.member.domain.*;
 import com.smartmobility.gada_api.member.dto.DetailsSignUpForm;
 import com.smartmobility.gada_api.member.dto.LoginResultDTO;
@@ -29,7 +30,6 @@ public class OauthService implements UserDetailsService {
     private final S3Client s3Client;
     private final OAuthTokenValidator tokenValidator;
     private final ModelMapper modelMapper;
-    private final Log log = LogFactory.getLog(getClass());
 
     @Override
     public UserDetails loadUserByUsername(String sub) throws UsernameNotFoundException {
@@ -37,6 +37,7 @@ public class OauthService implements UserDetailsService {
         return memberRepository.findByEmailAndProvider(pk[0], Provider.valueOf(pk[1]));
     }
 
+    /*제공자 별 1차 소셜로그인*/
     public LoginResultDTO socialLogin(String token, Provider provider, String sub) throws Exception {
         SocialUserInfoDTO userInfo = new SocialUserInfoDTO();
         switch (provider){
@@ -57,6 +58,7 @@ public class OauthService implements UserDetailsService {
         return socialSignUp(userInfo, provider);
     }
 
+    /*신규 가입자의 1차 회원가입 로직*/
     public LoginResultDTO socialSignUp(SocialUserInfoDTO userInfo, Provider provider){
         Member member = modelMapper.map(userInfo, Member.class);
         member.setSocialProvider(provider);
@@ -64,19 +66,17 @@ public class OauthService implements UserDetailsService {
         return new LoginResultDTO(member.getId());
     }
 
+    /*로그인*/
     public LoginResultDTO login(String email, Provider provider){
         Member member = memberRepository.findByEmailAndProvider(email, provider);
         return modelMapper.map(member, LoginResultDTO.class);
     }
 
+    /*추가적인 회원가입 로직*/
     public void detailsSignUp(Long id, DetailsSignUpForm detailsSignUpForm){
         Member member = memberRepository.findById(id).orElse(null);
         if(member == null){
             throw new RuntimeException("초기회원정보없음");
-        }
-        boolean isNicknameDuplicated = checkNicknameIsDuplicate(detailsSignUpForm.getNickname());
-        if(isNicknameDuplicated){
-            throw new RuntimeException("닉네임중복");
         }
 
         Terms terms = new Terms(detailsSignUpForm.getRequiredTermsYn(), detailsSignUpForm.getOptionalTermsYn());
@@ -87,13 +87,26 @@ public class OauthService implements UserDetailsService {
                 .toolType(detailsSignUpForm.getToolType())
                 .build();
         member.detailsSignUp(terms, details, detailsSignUpForm.getNickname());
-        log.info(member.toString());
     }
 
+    /*닉네임변경로직*/
+    public HttpBodyMessage modify(Member member, String nickname){
+        boolean isDuplicated = checkNicknameIsDuplicate(nickname);
+        if(isDuplicated){
+            return new HttpBodyMessage("fail", "닉네임중복");
+        }
+
+        member.update(nickname);
+        memberRepository.save(member);
+        return new HttpBodyMessage("success", "닉네임변경완료");
+    }
+
+    /*닉네임이 중복되는지 체크*/
     private boolean checkNicknameIsDuplicate(String nickname){
         return memberRepository.existsByNickname(nickname);
     }
 
+    /*회원정보삭제 (영구삭제)*/
     public void remove(Long id){
         Member member = memberRepository.findById(id).orElse(null);
         if(member == null){
@@ -102,6 +115,7 @@ public class OauthService implements UserDetailsService {
         memberRepository.delete(member);
     }
 
+    /*프로필이미지 등록 혹은 수정*/
     public void register(Member member, MultipartFile image) throws IOException {
         if(member.getProfileImgUrl() != null){
             s3Client.remove(member.getProfileImgUrl());
@@ -112,6 +126,7 @@ public class OauthService implements UserDetailsService {
         memberRepository.save(member);
     }
 
+    /*프로필이미지 삭제*/
     public void removeProfileImg(Member member){
         s3Client.remove(member.getProfileImgUrl());
         member.register(null);

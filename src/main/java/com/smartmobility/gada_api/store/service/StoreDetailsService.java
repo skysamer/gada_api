@@ -34,6 +34,7 @@ public class StoreDetailsService {
     private final StoreDetailsQueryRepository detailsQueryRepository;
     private final Log log = LogFactory.getLog(getClass());
 
+    /*가게 배리어프리 정보 제보하기*/
     public HttpBodyMessage report(StoreDetailsForm detailsForm, List<MultipartFile> images, Member member) throws IOException {
         Store store = storeRepository.findById(detailsForm.getStoreId()).orElse(null);
         if(store == null){
@@ -50,6 +51,7 @@ public class StoreDetailsService {
         return new HttpBodyMessage("success", "제보하기 성공");
     }
 
+    /*봉사인증이 가능한지 체크하는 로직*/
     private int checkCertificated(List<MultipartFile> images, boolean isAround, boolean isAlreadyCertificated){
         if (images == null || images.size() == 0 || !isAround || isAlreadyCertificated) {
             return 0;
@@ -57,6 +59,7 @@ public class StoreDetailsService {
         return 1;
     }
 
+    /*제보 이미지 업로드*/
     private void uploadImage(List<MultipartFile> images, StoreDetails details) throws IOException {
         if (images == null || images.size() == 0) {
             return;
@@ -69,6 +72,7 @@ public class StoreDetailsService {
         }
     }
 
+    /*내가 제보한 가게목록 조회*/
     public PageResult<MyReportStoreDto> getMyStores(Member member, Pageable pageable){
         List<MyReportStoreDto> myStores = detailsQueryRepository.getMyStores(member, pageable);
         long count = detailsQueryRepository.getMyStoreCount(member);

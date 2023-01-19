@@ -35,6 +35,7 @@ public class StoreReviewService {
     private final ModelMapper modelMapper;
     private final Log log = LogFactory.getLog(getClass());
 
+    /*가게 리뷰 등록*/
     public HttpBodyMessage post(StoreReviewForm reviewForm, List<MultipartFile> images, Member member) {
         Store store = storeRepository.findById(reviewForm.getStoreId()).orElse(null);
         if (store == null) {
@@ -52,6 +53,7 @@ public class StoreReviewService {
         return new HttpBodyMessage("success", "리뷰등록성공");
     }
 
+    /*리뷰 이미지 업로드*/
     private void uploadImages(List<MultipartFile> images, StoreReview review) throws IOException {
         if(images == null){
             return;
@@ -64,6 +66,7 @@ public class StoreReviewService {
         }
     }
 
+    /*가게별 리뷰목록 조회*/
     public PageResult<StoreReviewDto> getReviews(Long storeId, Pageable pageable){
         List<StoreReviewDto> reviews = reviewQueryRepository.getReviews(storeId, pageable);
         List<StoreReviewImageDto> images = reviewQueryRepository.getReviewImages(storeId);
@@ -77,6 +80,7 @@ public class StoreReviewService {
         return new PageResult<>(reviews, count);
     }
 
+    /*리뷰삭제*/
     public void remove(Long id){
         StoreReview review = reviewRepository.findById(id).orElse(null);
         if(review == null){
@@ -90,12 +94,14 @@ public class StoreReviewService {
         reviewRepository.delete(review);
     }
 
+    /*리뷰의 이미지 삭제*/
     private void removeImage(List<StoreReviewImage> reviewImages){
         for(StoreReviewImage reviewImage : reviewImages){
             s3Client.remove(reviewImage.getImageUrl());
         }
     }
 
+    /*리뷰수정*/
     public void modify(Long id, StoreReviewForm reviewForm, List<MultipartFile> images) throws Throwable {
         StoreReview review = reviewRepository.findById(id).orElseThrow(() -> new Throwable("id is null"));
         modelMapper.map(reviewForm, review);
@@ -111,6 +117,7 @@ public class StoreReviewService {
         }
     }
 
+    /*나의 리뷰목록 조회*/
     public PageResult<MyStoreReviewsDto> getMyReviews(Member member, Pageable pageable){
         List<MyStoreReviewsDto> myReviews = reviewQueryRepository.getMyReviews(member, pageable);
         List<StoreReviewImageDto> images = reviewQueryRepository.getMyReviewImages(member);
